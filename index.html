@@ -34,6 +34,59 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:400;
 #prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));
   box-shadow:0 0 8px var(--cyan);transition:width 1.5s cubic-bezier(.4,0,.2,1);}
 #prog-pct{font-size:11px;color:var(--cyan);min-width:34px;text-align:right;}
+/* ── DESKTOP SCENE ── */
+#desktop{position:fixed;inset:0;z-index:500;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse at 30% 40%,#0d1235 0%,#060816 55%,#030509 100%);}
+#desktop.show{pointer-events:auto;}
+#mbar{position:absolute;top:0;left:0;right:0;height:26px;
+  background:rgba(15,17,30,.88);backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:space-between;padding:0 14px;
+  font:12px/1 system-ui,sans-serif;color:rgba(255,255,255,.82);
+  border-bottom:1px solid rgba(255,255,255,.07);z-index:2;}
+#mbar-l,#mbar-r{display:flex;align-items:center;gap:14px;}
+.mi{white-space:nowrap;}.mi.bld{font-weight:600;}.mi.apl{font-size:16px;margin-right:4px;}
+#dock{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:flex-end;gap:7px;padding:8px 14px;
+  background:rgba(255,255,255,.13);backdrop-filter:blur(28px);
+  border-radius:18px;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 8px 40px rgba(0,0,0,.55);z-index:2;}
+.di{width:54px;height:54px;border-radius:13px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;position:relative;transition:transform .15s;}
+.dsep{width:1px;height:38px;background:rgba(255,255,255,.18);align-self:center;margin:0 3px;}
+.dlbl{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.78);color:#fff;font:11px/1.4 system-ui,sans-serif;
+  padding:3px 8px;border-radius:6px;white-space:nowrap;opacity:0;
+  pointer-events:none;transition:opacity .15s;}
+#di-finder{background:linear-gradient(145deg,#4dd0e1,#1565c0);}
+#di-chrome{background:conic-gradient(#ef5350 0 90deg,#fdd835 90deg 180deg,#66bb6a 180deg 270deg,#42a5f5 270deg);}
+#di-vsc   {background:linear-gradient(145deg,#0a2a6e,#1565c0);color:#4fc3f7;font:700 15px monospace;}
+#di-term  {background:linear-gradient(145deg,#0a0e1e,#111830);border:1px solid rgba(0,200,255,.35);
+  color:#00c8ff;font:700 14px monospace;box-shadow:0 0 12px rgba(0,200,255,.15);}
+#di-slack {background:linear-gradient(145deg,#3d0f40,#5b1a60);color:#e879a0;font-size:18px;}
+#di-trash {background:linear-gradient(145deg,#2e3a45,#455a64);}
+/* dot grid bg */
+#desktop::before{content:'';position:absolute;inset:0;z-index:0;
+  background-image:radial-gradient(circle,rgba(26,86,232,.12) 1px,transparent 1px);
+  background-size:36px 36px;}
+/* cursor */
+#cur-el{position:absolute;width:22px;height:28px;z-index:10;pointer-events:none;
+  filter:drop-shadow(1px 2px 3px rgba(0,0,0,.6));}
+#cur-el::before{content:'';position:absolute;top:0;left:0;
+  width:0;height:0;
+  border-style:solid;
+  border-width:0 7px 22px 0;
+  border-color:transparent #fff transparent transparent;
+  transform:rotate(-45deg);transform-origin:top left;}
+#cur-el::after{content:'';position:absolute;top:14px;left:5px;
+  width:6px;height:10px;background:#fff;border-radius:3px;
+  transform:rotate(-45deg);transform-origin:top left;}
+@keyframes iconBounce{
+  0%,100%{transform:translateY(0) scale(1);}
+  20%{transform:translateY(-20px) scale(1.1);}
+  50%{transform:translateY(-8px) scale(1.05);}
+  75%{transform:translateY(-14px) scale(1.08);}
+}
+@keyframes iconClick{0%,100%{transform:scale(1);}50%{transform:scale(.88);}}
 #flash{position:fixed;inset:0;z-index:350;background:#fff;opacity:0;pointer-events:none;}
 #logo-scene{position:fixed;inset:0;z-index:100;display:flex;align-items:center;
   justify-content:center;background:var(--bg);opacity:0;pointer-events:none;}
@@ -98,6 +151,29 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:400;
 </style>
 </head>
 <body>
+<div id="desktop">
+  <div id="mbar">
+    <div id="mbar-l">
+      <span class="mi apl">⌘</span>
+      <span class="mi bld">Terminal</span>
+      <span class="mi">Shell</span><span class="mi">Edit</span>
+      <span class="mi">View</span><span class="mi">Window</span><span class="mi">Help</span>
+    </div>
+    <div id="mbar-r">
+      <span class="mi" id="mclock">09:41</span>
+    </div>
+  </div>
+  <div id="dock">
+    <div class="di" id="di-finder"><span>⌂</span><div class="dlbl">Finder</div></div>
+    <div class="di" id="di-chrome"><span>○</span><div class="dlbl">Chrome</div></div>
+    <div class="di" id="di-vsc"><span>{}</span><div class="dlbl">VS Code</div></div>
+    <div class="di" id="di-term"><span>&gt;_</span><div class="dlbl">Terminal</div></div>
+    <div class="di" id="di-slack"><span>#</span><div class="dlbl">Slack</div></div>
+    <div class="dsep"></div>
+    <div class="di" id="di-trash"><span>⌫</span><div class="dlbl">Trash</div></div>
+  </div>
+  <div id="cur-el"></div>
+</div>
 <div id="flash"></div>
 <div id="scene">
   <div id="terminal">
@@ -302,6 +378,46 @@ function spawnRings(){
   });
 }
 
+async function desktopPhase(){
+  const desktop=document.getElementById('desktop');
+  const cur=document.getElementById('cur-el');
+  const termIcon=document.getElementById('di-term');
+  // set live clock
+  const now=new Date();
+  document.getElementById('mclock').textContent=
+    now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  // fade in desktop
+  desktop.style.transition='opacity .5s';desktop.style.opacity='1';
+  desktop.classList.add('show');
+  await sleep(700);
+  // place cursor top-left area
+  cur.style.position='absolute';cur.style.top='38%';cur.style.left='12%';
+  cur.style.transition='none';cur.style.opacity='1';
+  await sleep(100);
+  // animate cursor toward terminal icon
+  const r=termIcon.getBoundingClientRect();
+  cur.style.transition='top 1s cubic-bezier(.4,0,.2,1),left 1.1s cubic-bezier(.4,0,.2,1)';
+  cur.style.top=(r.top+r.height*.3)+'px';
+  cur.style.left=(r.left+r.width*.2)+'px';
+  await sleep(1150);
+  // show tooltip
+  termIcon.querySelector('.dlbl').style.opacity='1';
+  await sleep(300);
+  // click: cursor shrinks, icon bounces
+  cur.style.transition='transform .1s';cur.style.transform='scale(.75)';
+  termIcon.style.animation='iconClick .15s ease-out';
+  await sleep(160);
+  cur.style.transform='scale(1)';
+  termIcon.querySelector('.dlbl').style.opacity='0';
+  await sleep(100);
+  termIcon.style.animation='iconBounce .7s ease-out';
+  await sleep(900);
+  // fade out desktop
+  desktop.style.transition='opacity .55s';desktop.style.opacity='0';
+  await sleep(560);
+  desktop.style.display='none';
+}
+
 async function main(){
   const term=document.getElementById('terminal');
   const ls=document.getElementById('logo-scene');
@@ -315,9 +431,11 @@ async function main(){
 
   const logoPromise=buildTransparentLogo();
 
+  await desktopPhase();
+
   await sleep(150);term.classList.add('show');render();await sleep(450);
 
-  const CT=300;
+  const CT=3300;
   for(const line of LINES){
     const n=vis(line);
     if(n===0){allLines.push('');render();await sleep(10);continue;}
